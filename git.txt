@@ -10,6 +10,7 @@ git commit -m "commentaire1"
 
 git remote add origin https://github.com/snokse/PRIMATIPS_APP2.git
 git remote add origin https://github.com/snokse/PRIMATIPS.git
+git remote add origin https://github.com/snokse/betsmart.git
 git branch -M main
 git push -u origin main
 

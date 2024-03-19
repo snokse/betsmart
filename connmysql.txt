@@ -1,0 +1,27 @@
+import mysql.connector
+
+# Connexion à la base de données MySQL
+conn = mysql.connector.connect(
+    host="198.54.120.102",
+    user="geoanalysis_wp916",
+    password="U=,f6G;V6tG0",
+    database="geoanalysis_betsmart",
+)
+table_name = "BetSmart"
+# Création d'un curseur
+cursor = conn.cursor()
+
+# Exécution d'une requête SQL
+query = f"SELECT * FROM {table_name}"
+cursor.execute(query)
+
+# Récupération des résultats
+results = cursor.fetchall()
+
+# Affichage de la deuxième colonne
+for row in results:
+    print(row[1])  # Affiche la deuxième colonne
+
+# Fermeture du curseur et de la connexion
+cursor.close()
+conn.close()

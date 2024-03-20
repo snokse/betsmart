@@ -1,7 +1,7 @@
 import sqlite3
 import tkinter as tk
 from tkinter import ttk
-import fonctionMAX
+import max1max2
 import tkinter.font as tkFont
 
 
@@ -417,17 +417,17 @@ def search_BET():
         dict_max_tip = {'1': countDic["count_TIP_1"], 'X': countDic["count_TIP_X"], '2': countDic["count_TIP_2"]}
 
         # Utilisation de la fonction MAX
-        max_1 = fonctionMAX.max_of_three_values(dict_max_1)
-        max_X = fonctionMAX.max_of_three_values(dict_max_X)
-        max_2 = fonctionMAX.max_of_three_values(dict_max_2)
-        max_1X = fonctionMAX.max_of_three_values(dict_max_1X)
-        max_12 = fonctionMAX.max_of_three_values(dict_max_12)
-        max_X2 = fonctionMAX.max_of_three_values(dict_max_X2)
-        max_1X2 = fonctionMAX.max_of_three_values(dict_max_1X2)
-        max_TIP_1 = fonctionMAX.max_of_three_values(dict_max_tip_1)
-        max_TIP_X = fonctionMAX.max_of_three_values(dict_max_tip_X)
-        max_TIP_2 = fonctionMAX.max_of_three_values(dict_max_tip_2)
-        max_TIP = fonctionMAX.max_of_three_values(dict_max_tip)
+        max_1 = max1max2.max_and_second_max(dict_max_1)
+        max_X = max1max2.max_and_second_max(dict_max_X)
+        max_2 = max1max2.max_and_second_max(dict_max_2)
+        max_1X = max1max2.max_and_second_max(dict_max_1X)
+        max_12 = max1max2.max_and_second_max(dict_max_12)
+        max_X2 = max1max2.max_and_second_max(dict_max_X2)
+        max_1X2 = max1max2.max_and_second_max(dict_max_1X2)
+        max_TIP_1 = max1max2.max_and_second_max(dict_max_tip_1)
+        max_TIP_X = max1max2.max_and_second_max(dict_max_tip_X)
+        max_TIP_2 = max1max2.max_and_second_max(dict_max_tip_2)
+        max_TIP = max1max2.max_and_second_max(dict_max_tip)
 
 
         # print("Nombre de lignes dans la colonne 'count1':", countALL)
@@ -450,20 +450,12 @@ def search_BET():
 def update_treeview(rows):
     for i in data_tree.get_children():
         data_tree.delete(i)
-    for row in rows[:40]:
+    # for row in rows[:40]:
+    for row in rows:
         data_tree.insert('', 'end', values=row)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
         
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-def show_previous():
-    # Mettre en œuvre la logique pour afficher les données précédentes
-    pass
 
-def show_next():
-    # Mettre en œuvre la logique pour afficher les données suivantes
-    pass
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 create_database()
@@ -472,7 +464,7 @@ create_database()
 
 # Fonction pour créer un label avec un contour
 def create_label_with_border(parent, text, row, column):
-    labelBET = tk.Label(parent, text=text, relief="solid", borderwidth=1, width=10, height=2)
+    labelBET = tk.Label(parent, text=text, relief="solid", borderwidth=1, width=12, height=2)
     labelBET.grid(row=row, column=column, padx=1, pady=1)
     return labelBET
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -536,7 +528,7 @@ root.state('zoomed')  # Pour Windows
 
 # Frame 1 : Logo et Titre 6170B9
 frame1 = tk.Frame(root, bg="#115571", width=largeur_ecran // 2) 
-frame1.pack(side="left", fill="y")  # Remplir verticalement
+frame1.pack(padx=1, pady=1, side="top", fill="x")  # Remplir verticalement
 # Ajout du logo au premier frame
 logo = tk.PhotoImage(file="IMG/BetSmart_LOGO.jpg")
 label_logo = tk.Label(frame1, image=logo, bg="#115571")
@@ -636,11 +628,27 @@ for column in data_tree['columns']:
 frame_buttons = tk.Frame(frame4)
 frame_buttons.pack()
 
-button_previous = tk.Button(frame_buttons, text="Précédent", command=show_previous)
+# Définir start_index globalement
+start_index = 0
+
+# Définir les fonctions show_previous() et show_next() avec start_index en tant qu'argument
+def show_previous(start_index):
+    if start_index > 0:
+        start_index -= 40
+        update_treeview(rows[start_index:start_index + 40])
+
+def show_next(start_index):
+    if start_index + 40 < len(rows):
+        start_index += 40
+        update_treeview(rows[start_index:start_index + 40])
+
+# Utiliser les boutons avec les fonctions en passant start_index en argument
+button_previous = tk.Button(frame_buttons, text="Précédent", command=lambda: show_previous(start_index))
 button_previous.grid(row=0, column=0, padx=5, pady=5)
 
-button_next = tk.Button(frame_buttons, text="Suivant", command=show_next)
+button_next = tk.Button(frame_buttons, text="Suivant", command=lambda: show_next(start_index))
 button_next.grid(row=0, column=1, padx=5, pady=5)
+
 
 # Ajouter une barre de défilement horizontal
 scrollbar_x = ttk.Scrollbar(frame4, orient="horizontal", command=data_tree.xview)
